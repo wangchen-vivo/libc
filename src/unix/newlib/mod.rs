@@ -274,14 +274,14 @@ s! {
     #[cfg_attr(
         all(
             target_pointer_width = "32",
-            any(target_arch = "mips", target_arch = "arm", target_arch = "powerpc")
+            any(target_arch = "mips", target_arch = "arm", target_arch = "powerpc", target_arch = "riscv32")
         ),
         repr(align(4))
     )]
     #[cfg_attr(
         any(
             target_pointer_width = "64",
-            not(any(target_arch = "mips", target_arch = "arm", target_arch = "powerpc"))
+            not(any(target_arch = "mips", target_arch = "arm", target_arch = "powerpc", target_arch = "riscv32"))
         ),
         repr(align(8))
     )]
@@ -293,14 +293,14 @@ s! {
     #[cfg_attr(
         all(
             target_pointer_width = "32",
-            any(target_arch = "mips", target_arch = "arm", target_arch = "powerpc")
+            any(target_arch = "mips", target_arch = "arm", target_arch = "powerpc", target_arch = "riscv32")
         ),
         repr(align(4))
     )]
     #[cfg_attr(
         any(
             target_pointer_width = "64",
-            not(any(target_arch = "mips", target_arch = "arm", target_arch = "powerpc"))
+            not(any(target_arch = "mips", target_arch = "arm", target_arch = "powerpc", target_arch = "riscv32"))
         ),
         repr(align(8))
     )]
