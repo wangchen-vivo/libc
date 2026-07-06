@@ -16,9 +16,9 @@ cfg_if! {
         pub type ino_t = c_ushort;
         pub type off_t = c_int;
     } else if #[cfg(target_os = "blueos")] {
-        pub type dev_t = c_ulong;
-        pub type ino_t = c_ulong;
-        pub type off_t = i64;
+        pub type dev_t = c_ushort;
+        pub type ino_t = c_ushort;
+        pub type off_t = c_long;
     } else {
         pub type dev_t = u32;
         pub type ino_t = u32;
@@ -36,7 +36,7 @@ pub type nfds_t = u32;
 #[cfg(not(target_os = "blueos"))]
 pub type nlink_t = c_ushort;
 #[cfg(target_os = "blueos")]
-pub type nlink_t = c_uint;
+pub type nlink_t = c_ushort;
 #[cfg(target_pointer_width = "32")]
 pub type pthread_t = c_ulong;
 #[cfg(target_pointer_width = "64")]
@@ -71,7 +71,7 @@ cfg_if! {
     ))] {
         pub type time_t = c_longlong;
     } else if #[cfg(target_os = "blueos")] {
-        pub type time_t = c_long;
+        pub type time_t = c_longlong;
     } else {
         pub type time_t = i32;
     }

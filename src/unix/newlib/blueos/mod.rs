@@ -15,38 +15,39 @@ s! {
     }
 
     pub struct itimerspec {
-        pub it_interval: ::timespec,
-        pub it_value: ::timespec,
+        pub it_interval: crate::timespec,
+        pub it_value: crate::timespec,
     }
     // reuse linux sigevent definition
     pub struct sigevent {
-        pub sigev_value: ::sigval,
-        pub sigev_signo: ::c_int,
-        pub sigev_notify: ::c_int,
+        pub sigev_value: crate::sigval,
+        pub sigev_signo: c_int,
+        pub sigev_notify: c_int,
         // Actually a union.  We only expose sigev_notify_thread_id because it's
         // the most useful member
-        pub sigev_notify_thread_id: ::c_int,
+        pub sigev_notify_thread_id: c_int,
         #[cfg(target_pointer_width = "64")]
-        __unused1: [::c_int; 11],
+        __unused1: [c_int; 11],
         #[cfg(target_pointer_width = "32")]
-        __unused1: [::c_int; 12]
+        __unused1: [c_int; 12]
     }
 
     pub struct dirent {
-        pub d_ino: ino_t,
-        pub d_off: off_t,
+        pub d_ino: crate::ino_t,
+        pub d_off: crate::off_t,
         pub d_reclen: c_ushort,
         pub d_type: c_uchar,
-        pub d_name: [c_char; 0],
+        pub d_namlen: c_ushort,
+        pub d_name: [c_char; 256],
     }
 
     pub struct msghdr {
         pub msg_name: *mut c_void,
-        pub msg_namelen: socklen_t,
-        pub msg_iov: *mut iovec,
+        pub msg_namelen: crate::socklen_t,
+        pub msg_iov: *mut crate::iovec,
         pub msg_iovlen: c_int,
         pub msg_control: *mut c_void,
-        pub msg_controllen: socklen_t,
+        pub msg_controllen: crate::socklen_t,
         pub msg_flags: c_int,
     }
 
@@ -102,15 +103,13 @@ s! {
         pub st_gid: crate::gid_t,
         pub st_rdev: crate::dev_t,
         pub st_size: crate::off_t,
-        pub st_atime: crate::time_t,
-        pub st_atime_nsec: c_long,
-        pub st_mtime: crate::time_t,
-        pub st_mtime_nsec: c_long,
-        pub st_ctime: crate::time_t,
-        pub st_ctime_nsec: c_long,
+        __st_size_padding: c_int,
+        pub st_atim: crate::timespec,
+        pub st_mtim: crate::timespec,
+        pub st_ctim: crate::timespec,
         pub st_blksize: crate::blksize_t,
         pub st_blocks: crate::blkcnt_t,
-        pub st_spare4: [c_long; 2usize],
+        __st_spare: [c_int; 2usize],
     }
 
     pub struct statfs {
