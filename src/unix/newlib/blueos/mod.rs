@@ -1,5 +1,9 @@
 use crate::prelude::*;
 
+/// Reuse the POSIX-2001 `timespec` from `unix/mod.rs` so that `libc::timespec`
+/// and the type used by `futimens` / `utimensat` are the same type.
+pub use crate::timespec;
+
 /// BlueOS's libc is supposed to support POSIX.1-2001.
 pub type clock_t = c_long;
 
@@ -9,11 +13,6 @@ pub type sigset_t = c_ulong;
 pub type timer_t = c_int;
 
 s! {
-    pub struct timespec {
-        pub tv_sec: crate::time_t,
-        pub tv_nsec: c_long,
-    }
-
     pub struct itimerspec {
         pub it_interval: crate::timespec,
         pub it_value: crate::timespec,
@@ -397,10 +396,6 @@ pub const EAI_MEMORY: c_int = -10;
 pub const EAI_SYSTEM: c_int = -11;
 pub const EAI_OVERFLOW: c_int = -12;
 
-/// https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/unistd.h.html
-pub const _SC_PAGESIZE: c_int = 8;
-pub const _SC_GETPW_R_SIZE_MAX: c_int = 51;
-
 /// https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/limits.h.html
 pub const PTHREAD_STACK_MIN: crate::size_t = 4 * 1024;
 
@@ -417,11 +412,19 @@ const _: [(); 0x4600] = [(); FBIOGET_VSCREENINFO as usize];
 const _: [(); 0x4601] = [(); FBIOPUT_VSCREENINFO as usize];
 const _: [(); 0x4602] = [(); FBIOGET_FSCREENINFO as usize];
 const _: [(); 12] = [(); mem::size_of::<fb_bitfield>()];
+// BlueOS uses 32-bit `c_ulong` on all targets, so `fb_fix_screeninfo` is
+// always 80 bytes regardless of pointer width.
 const _: [(); 80] = [(); mem::size_of::<fb_fix_screeninfo>()];
 const _: [(); 160] = [(); mem::size_of::<fb_var_screeninfo>()];
 
 extern "C" {
     pub fn futimens(fd: c_int, times: *const timespec) -> c_int;
+    pub fn utimensat(
+        dirfd: c_int,
+        path: *const c_char,
+        times: *const timespec,
+        flag: c_int,
+    ) -> c_int;
     pub fn writev(fd: c_int, iov: *const crate::iovec, iovcnt: c_int) -> crate::ssize_t;
     pub fn readv(fd: c_int, iov: *const crate::iovec, iovcnt: c_int) -> crate::ssize_t;
 

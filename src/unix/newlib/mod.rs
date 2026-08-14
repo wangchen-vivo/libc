@@ -309,6 +309,9 @@ s! {
         size: [u8; crate::__SIZEOF_PTHREAD_RWLOCK_T],
     }
 
+    // BlueOS uses 32-bit `long` (`c_long = i32`), so `pthread_mutexattr_t`
+    // aligns to 4 on all targets including 64-bit. This matches the librs
+    // `MutexAttr` struct which is `#[repr(C)]` with `c_int` fields.
     #[cfg_attr(
         any(
             target_pointer_width = "32",
@@ -316,7 +319,8 @@ s! {
             target_arch = "powerpc64",
             target_arch = "mips64",
             target_arch = "s390x",
-            target_arch = "sparc64"
+            target_arch = "sparc64",
+            target_os = "blueos",
         ),
         repr(align(4))
     )]
@@ -327,7 +331,8 @@ s! {
             target_arch = "powerpc64",
             target_arch = "mips64",
             target_arch = "s390x",
-            target_arch = "sparc64"
+            target_arch = "sparc64",
+            target_os = "blueos",
         )),
         repr(align(8))
     )]
