@@ -1,5 +1,4 @@
 use crate::prelude::*;
-
 /// Reuse the POSIX-2001 `timespec` from `unix/mod.rs` so that `libc::timespec`
 /// and the type used by `futimens` / `utimensat` are the same type.
 pub use crate::timespec;
