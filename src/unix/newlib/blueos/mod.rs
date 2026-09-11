@@ -193,6 +193,15 @@ s! {
         pub reserved: [u32; 4],
     }
 
+    pub struct fb_draw_area {
+        pub x: u32,
+        pub y: u32,
+        pub width: u32,
+        pub height: u32,
+        pub stride: u32,
+        pub pixels: *const ::c_void,
+    }
+
     pub struct pthread_barrier_t {
         #[cfg(target_pointer_width = "32")]
         pub __librs_internal_size: [::c_uchar; 24],
@@ -299,6 +308,8 @@ impl ::Clone for __c_anonymous_iwreq {
 pub const FBIOGET_VSCREENINFO: ::c_ulong = 0x4600;
 pub const FBIOPUT_VSCREENINFO: ::c_ulong = 0x4601;
 pub const FBIOGET_FSCREENINFO: ::c_ulong = 0x4602;
+/// Draw a two-dimensional pixel area using the active framebuffer format.
+pub const FBIO_DRAW_AREA: ::c_ulong = 0x46F0;
 pub const TCGETS: ::c_ulong = 0x5401;
 pub const TCSETS: ::c_ulong = 0x5402;
 pub const TCSETSW: ::c_ulong = 0x5403;
@@ -555,9 +566,11 @@ pub const IP_HDRINCL: ::c_int = 2;
 const _: [(); 0x4600] = [(); FBIOGET_VSCREENINFO as usize];
 const _: [(); 0x4601] = [(); FBIOPUT_VSCREENINFO as usize];
 const _: [(); 0x4602] = [(); FBIOGET_FSCREENINFO as usize];
+const _: [(); 0x46F0] = [(); FBIO_DRAW_AREA as usize];
 const _: [(); 12] = [(); ::mem::size_of::<::fb_bitfield>()];
 const _: [(); 80] = [(); ::mem::size_of::<::fb_fix_screeninfo>()];
 const _: [(); 160] = [(); ::mem::size_of::<::fb_var_screeninfo>()];
+const _: [(); 24] = [(); ::mem::size_of::<::fb_draw_area>()];
 
 extern "C" {
     pub fn futimens(fd: ::c_int, times: *const ::timespec) -> ::c_int;
